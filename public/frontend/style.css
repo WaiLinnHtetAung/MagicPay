@@ -246,12 +246,14 @@ body .card {
 
 /*-----transaction ---------*/
 
-.transaction {
+.transaction,
+.transaction_detail {
     overflow-y: scroll;
     height: 80vh;
 }
 
-.transaction::-webkit-scrollbar {
+.transaction::-webkit-scrollbar,
+.transaction_detail::-webkit-scrollbar {
     display: none;
 }
 

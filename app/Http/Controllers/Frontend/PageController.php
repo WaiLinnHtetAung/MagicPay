@@ -129,34 +129,38 @@ class PageController extends Controller
                     'description' => $request->description,
                 ]);
 
+            //noti
             $data = [
-                'title' => 'Changed Password',
-                'message' => 'Your account is successfully changed',
-                'sourceable_id' => $user->id,
-                'sourceable_type' => User::class,
-                'web_link'  => url('profile')
+                'title' => 'E-money Transfered!',
+                'message' => "Your wallet transfered <b>".number_format($request->amount)."</b> MMK to <b>$receiveAccount->name</b>",
+                'sourceable_id' => $sender->id,
+                'sourceable_type' => Transaction::class,
+                'web_link'  => url('/transaction/'.$sender->trx_id)
             ];
 
-            Notification::send([$user], new GeneralNotification ($data));
+            Notification::send([$sendAccount], new GeneralNotification ($data));
 
             //transaction for receiver
-            Transaction::create([
-                'ref_no' => $ref_no ,
-                'trx_id' => UUIDGenerate::trxId(),
-                'user_id' => $receiveAccount->id,
-                'type' => 1,
-                'amount' => $request->amount,
-                'source_id' => $sendAccount->id,
-                'description' => $request->description,
-            ]);
+            $receiver = Transaction::create([
+                    'ref_no' => $ref_no ,
+                    'trx_id' => UUIDGenerate::trxId(),
+                    'user_id' => $receiveAccount->id,
+                    'type' => 1,
+                    'amount' => $request->amount,
+                    'source_id' => $sendAccount->id,
+                    'description' => $request->description,
+                ]);
 
+            //noti
             $data = [
-                'title' => 'Changed Password',
-                'message' => 'Your account is successfully changed',
-                'sourceable_id' => $user->id,
-                'sourceable_type' => User::class,
-                'web_link'  => url('profile')
+                'title' => 'E-money Received!',
+                'message' => "Your wallet received <b>".number_format($request->amount)."</b> MMK from <b>$sendAccount->name</b>",
+                'sourceable_id' => $receiver->id,
+                'sourceable_type' => Transaction::class,
+                'web_link'  => url('/transaction/'.$receiver->trx_id)
             ];
+
+            Notification::send([$receiveAccount], new GeneralNotification ($data));
 
             DB::commit();
 

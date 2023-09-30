@@ -33,7 +33,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/EncryptDecrypt.php"
+            "app/Helpers/EncryptDecrypt.php",
+            "app/Helpers/ResponseHelper.php"
         ]
     },
     "autoload-dev": {
