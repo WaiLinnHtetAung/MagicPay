@@ -1,0 +1,53 @@
+.admin-title {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin: 10px 0 30px;
+}
+
+.admin-title i {
+    font-size: 44px;
+    color: rgb(181, 196, 238)
+}
+
+.admin-title div {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.card .card-body th {
+    background-color: rgb(240, 240, 240);
+}
+
+
+/* sweet alert */
+
+.layout-navbar {
+    z-index: 9 !important;
+}
+
+.swal2-popup.swal2-toast.swal2-icon-success.swal2-show {
+    z-index: 99999;
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show {
+    z-index: 9999;
+}
+
+
+/* action icon */
+
+.action-icon a {
+    margin-right: 10px;
+    padding: 5px;
+    transition: .3s;
+    border-radius: 7px;
+}
+
+.action-icon a i {
+    font-size: 20px;
+}
+
+.action-icon a:hover {
+    background-color: #f2f2f2;
+}

@@ -1,0 +1,191 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use DataTables;
+use App\Models\User;
+use App\Models\Wallet;
+use App\Models\AdminUser;
+use Jenssegers\Agent\Agent;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreUsers;
+use App\Http\Requests\UpdateUser;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreAdminUsers;
+use App\Http\Requests\UpdateAdminUser;
+use App\Helpers\UUIDGenerate;
+
+class UserController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('admin.user.index');
+    }
+
+    //server side data for datatable
+    public function ssd() {
+        $data = User::query();
+
+        return Datatables::of($data)
+            ->editColumn('user_agent', function($each) {
+                if($each->user_agent) {
+                    $agent = new Agent();
+                    $agent->setUserAgent($each->user_agent);
+                    $device = $agent->device();
+                    $platform = $agent->platform();
+                    $browser = $agent->browser();
+
+                    return '
+                        <table class="table table-sm table-bordered table-striped">
+                            <tbody>
+                                <tr>
+                                    <td>Device</td>
+                                    <td>'.$device.'</td>
+                                </tr>
+                                <tr>
+                                    <td>Platform</td>
+                                    <td>'.$platform.'</td>
+                                </tr>
+                                <tr>
+                                    <td>Browser</td>
+                                    <td>'.$browser.'</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    ';
+                }
+
+                return '-';
+
+            })
+            ->editColumn('updated_at', function($each) {
+                return date_format($each->updated_at, "Y-m-d H:i:s");
+            })
+            ->addColumn('action', function($each) {
+                $edit_icon = '<a href="'.route('admin.users.edit', $each->id).'" class="text-info"><i class="bx bx-edit" ></i></a>';
+                $del_icon = '<a href="" class="text-danger delete-btn" data-id="'.$each->id.'"><i class="bx bxs-trash-alt" ></i></a>';
+
+                return '<div class="action-icon">' . $edit_icon . $del_icon . '</div>';
+            })
+            ->rawColumns(['user_agent', 'action'])
+            ->make(true);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('admin.user.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreUsers $request)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name'   => $request->name,
+                'email'  => $request->email,
+                'phone'  => $request->phone,
+                'password'  => Hash::make($request->password)
+            ]);
+
+            Wallet::firstOrCreate(
+                [
+                    'user_id' => $user->id   //conditional statement
+                ],
+                [
+                    'account_number'    => UUIDGenerate::accountNumber(),
+                    'amount'            => 0,
+                ]
+            );
+
+            DB::commit();
+            return redirect()->route('admin.users.index')->with('success', 'Successfully Created');
+        } catch(\Exception $err) {
+            return back()->with('fail', 'Something went wrong !' . $err->getMessage())->withInput();
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\AdminUser  $adminUser
+     * @return \Illuminate\Http\Response
+     */
+    public function show(AdminUser $adminUser)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return view('admin.user.edit', compact('user'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function update(User $user, UpdateUser $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $user->update($request->all());
+
+            Wallet::firstOrCreate(
+                [
+                    'user_id' => $user->id   //conditional statement
+                ],
+                [
+                    'account_number'    => UUIDGenerate::accountNumber(),
+                    'amount'            => 0,
+                ]
+            );
+
+            DB::commit();
+
+            return redirect()->route('admin.users.index')->with('success', 'Successfully Updated');
+        } catch(\Exception $err) {
+            return back()->with('fail', 'Something went wrong !' . $err->getMessage())->withInput();
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\AdminUser  $adminUser
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return 'success';
+    }
+}
