@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Wallet;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Helpers\UUIDGenerate;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
 
 class RegisteredUserController extends Controller
 {
@@ -37,20 +40,38 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'ip' => $request->ip(),
-            'user_agent' => $request->server('HTTP_USER_AGENT'),
-            'login_at' => date('Y-m-d H:i:s')
-        ]);
+        DB::beginTransaction();
 
-        event(new Registered($user));
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'ip' => $request->ip(),
+                'user_agent' => $request->server('HTTP_USER_AGENT'),
+                'login_at' => date('Y-m-d H:i:s')
+            ]);
 
-        Auth::login($user);
+            Wallet::firstOrCreate(
+                [
+                    'user_id' => $user->id   //conditional statement
+                ],
+                [
+                    'account_number'    => UUIDGenerate::accountNumber(),
+                    'amount'            => 5000,
+                ]
+            );
 
-        return redirect(RouteServiceProvider::HOME);
+            DB::commit();
+
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            return redirect(RouteServiceProvider::HOME);
+        }catch(\Exception $err) {
+            return back()->with('fail', $err->getMessage())->withInput();
+        }
     }
 }

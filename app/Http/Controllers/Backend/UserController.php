@@ -111,7 +111,7 @@ class UserController extends Controller
                 ],
                 [
                     'account_number'    => UUIDGenerate::accountNumber(),
-                    'amount'            => 0,
+                    'amount'            => 5000,
                 ]
             );
 

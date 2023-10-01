@@ -19,7 +19,7 @@
         {{-- date picker  --}}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-        <link rel="stylesheet" href="{{asset('frontend/style.css')}}">
+        <link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">
 
         @yield('styles')
     </head>
