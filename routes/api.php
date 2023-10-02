@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\PageController;
 
 /*
@@ -21,5 +22,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::group(['prefix' => 'v1'], function() {
-    Route::get('/test', [PageController::class, 'test']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::group(['middleware' => ['auth:api']],function() {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/profile', [PageController::class, 'profile']);
+
+        Route::get('/transaction', [PageController::class, 'transaction']);
+        Route::get('/transaction/{transaction:trx_id}', [PageController::class, 'transactionDetail']);
+    });
 });

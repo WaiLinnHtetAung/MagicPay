@@ -11,6 +11,7 @@
         "jenssegers/agent": "^2.6",
         "laravel/breeze": "^1.19",
         "laravel/framework": "^9.19",
+        "laravel/passport": "^11.9",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "proengsoft/laravel-jsvalidation": "^4.8",
