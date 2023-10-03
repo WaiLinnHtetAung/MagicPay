@@ -14,6 +14,8 @@ class ProfileResource extends JsonResource
      */
     public function toArray($request)
     {
+        $unread_noti_count = auth()->user()->unreadNotifications()->count();
+
         return [
             'name' => $this->name,
             'phone' => $this->phone,
@@ -21,7 +23,8 @@ class ProfileResource extends JsonResource
             'amount' => $this->wallet ? number_format($this->wallet->amount) : '',
             'account_number' => $this->wallet ? $this->wallet->account_number : '',
             'profile' => asset('images/profile.png'),
-            'qr_value' => $this->phone
+            'qr_value' => $this->phone,
+            'unread_noti_count' => $unread_noti_count,
         ];
     }
 }
