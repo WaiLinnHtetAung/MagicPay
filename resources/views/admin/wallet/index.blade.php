@@ -13,7 +13,7 @@
             <table class="table table-bordered" id="DataTable">
                 <thead>
                     <th>Account Number</th>
-                    <th>Account Person</th>
+                    <th class="no-sort">Account Person</th>
                     <th>Amount (MMK)</th>
                     <th>Created at</th>
                     <th>Updated at</th>
@@ -30,39 +30,38 @@
     <script>
         $(document).ready(function() {
             const table = new DataTable('#DataTable', {
-                            processing: true,
-                            serverSide: true,
-                            ajax: '/admin/wallet/datatable/ssd',
-                            columns: [
-                                {
-                                    data: 'account_number',
-                                    name: 'account_number'
-                                },
-                                {
-                                    data: 'account_person',
-                                    name: 'account_person'
-                                },
-                                {
-                                    data: 'amount',
-                                    name: 'amount'
-                                },
-                                {
-                                    data: 'created_at',
-                                    name: 'created_at'
-                                },
-                                {
-                                    data: 'updated_at',
-                                    name: 'updated_at'
-                                },
-                            ],
-                            columnDefs: [{
-                                targets: 'no-sort',
-                                sortable: false,
-                            }],
-                            order: [
-                                [4, 'desc']
-                            ]
-                        });
+                processing: true,
+                serverSide: true,
+                ajax: '/admin/wallet/datatable/ssd',
+                columns: [{
+                        data: 'account_number',
+                        name: 'account_number'
+                    },
+                    {
+                        data: 'account_person',
+                        name: 'account_person'
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'updated_at',
+                        name: 'updated_at'
+                    },
+                ],
+                columnDefs: [{
+                    targets: 'no-sort',
+                    sortable: false,
+                }],
+                order: [
+                    [4, 'desc']
+                ]
+            });
         })
     </script>
 @endsection

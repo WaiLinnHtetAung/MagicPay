@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
-    data-assets-path="{{asset('backend/assets/')}}" data-template="vertical-menu-template-free">
+    data-assets-path="{{ asset('backend/assets/') }}" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8" />
@@ -13,7 +13,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{asset('favicon.ico')}}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,23 +23,25 @@
         rel="stylesheet" />
 
     <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="{{asset('backend/assets/vendor/fonts/boxicons.css')}}" />
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendor/fonts/boxicons.css') }}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{asset('backend/assets/vendor/css/core.css')}}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{asset('backend/assets/vendor/css/theme-default.css')}}" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="{{asset('backend/assets/css/demo.css')}}" />
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendor/css/core.css') }}"
+        class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendor/css/theme-default.css') }}"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/demo.css') }}" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{{asset('backend/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
-    <link rel="stylesheet" href="{{asset('backend/assets/vendor/libs/apex-charts/apex-charts.css')}}" />
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="{{asset('backend/assets/vendor/js/helpers.js')}}"></script>
-    <script src="{{asset('backend/assets/js/config.js')}}"></script>
+    <script src="{{ asset('backend/assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/config.js') }}"></script>
 
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
@@ -86,8 +88,8 @@
                             </div>
                             <div>
                                 <span>Developed by</span>
-                                <a href="https://wailinnhtetaung.top" target="_blank"
-                                    class="footer-link fw-bolder">Wai Linn Htet Aung</a>
+                                <a href="https://wailinnhtetaung.top" target="_blank" class="footer-link fw-bolder">Wai
+                                    Linn Htet Aung</a>
 
                             </div>
                         </div>
@@ -109,22 +111,22 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="{{asset('backend/assets/vendor/libs/jquery/jquery.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/libs/popper/popper.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/js/bootstrap.js')}}"></script>
-    <script src="{{asset('backend/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
+    <script src="{{ asset('backend/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
 
-    <script src="{{asset('backend/assets/vendor/js/menu.js')}}"></script>
+    <script src="{{ asset('backend/assets/vendor/js/menu.js') }}"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="{{asset('backend/assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
+    <script src="{{ asset('backend/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 
     <!-- Main JS -->
-    <script src="{{asset('backend/assets/js/main.js')}}"></script>
+    <script src="{{ asset('backend/assets/js/main.js') }}"></script>
 
     <!-- Page JS -->
-    <script src="{{asset('backend/assets/js/dashboards-analytics.js')}}"></script>
+    <script src="{{ asset('backend/assets/js/dashboards-analytics.js') }}"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -134,7 +136,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     {{-- laravel jsvalidation  --}}
-    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
 
     {{-- sweetalert 2  --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -145,10 +147,10 @@
     <script>
         $(document).ready(function() {
             let token = document.head.querySelector('meta[name="csrf-token"]');
-            if(token) {
+            if (token) {
                 $.ajaxSetup({
                     headers: {
-                        'X-CSRF_TOKEN' : token.content
+                        'X-CSRF_TOKEN': token.content
                     }
                 })
             }
@@ -170,10 +172,10 @@
                 }
             })
 
-            @if(session('success'))
+            @if (session('success'))
                 Toast.fire({
                     icon: 'success',
-                    title: "{{session('success')}}"
+                    title: "{{ session('success') }}"
                 })
             @endif
         })
